@@ -1,9 +1,8 @@
 import * as Discord from 'discord.js';
 import * as logger from 'winston';
 import * as dotenv from 'dotenv';
-import * as steem from 'steem';
+// import * as steem from 'steem';
 import * as http from 'http';
-import axios from 'axios';
 
 import 'babel-polyfill';
 
@@ -31,11 +30,11 @@ client.on('message', msg => {
 
     if (currentUserId === config.botId) {
         logger.info('BOT MESSAGE:', currentContent);
-    } else if (
-        currentContent.toLowerCase() === 'what is the meaning of life?' ||
-        currentContent.toLowerCase() === 'what is meaning of life?'
-    ) {
-        msg.reply('42');
+        // } else if (
+        //     currentContent.toLowerCase() === 'what is the meaning of life?' ||
+        //     currentContent.toLowerCase() === 'what is meaning of life?'
+        // ) {
+        //     msg.reply('42');
     } else {
         let currentCreatedTime = getDateTimeFromTimestamp(
             currentCreatedTimestamp
@@ -90,4 +89,11 @@ client.on('message', msg => {
             .catch(console.error);
     }
 });
-client.login(process.env.DISCORD_TOKEN); // http //     .createServer(function(request, response) { //         response.writeHead(200, { 'Content-Type': contentType }); //         response.end(content, 'utf-8'); //     }) //     .listen(process.env.PORT || 5000);
+client.login(process.env.DISCORD_TOKEN);
+//
+http
+    .createServer(function(request, response) {
+        response.writeHead(200, { 'Content-Type': contentType });
+        response.end(content, 'utf-8');
+    })
+    .listen(process.env.PORT || 5000);
