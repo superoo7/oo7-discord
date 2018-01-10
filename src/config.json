@@ -1,5 +1,10 @@
 {
   "trigger": ".",
   "botId": "399088553629450240",
-  "timeAllowed": "30"
+  "timeAllowed": "64800",
+  "whitelistId": [],
+  "adminUser": {
+    "superoo7": "206360732818735104",
+    "littlenewthings": "330221961684713474"
+  }
 }

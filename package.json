@@ -1,13 +1,13 @@
 {
   "scripts": {
-    "dev":
-      "NODE_ENV=development nodemon -w src --exec \"babel-node src --presets env\"",
+    "dev": "NODE_ENV=development nodemon -w src --exec \"babel-node src --presets env\"",
     "build": "babel src -s -D -d dist --presets env",
     "start": "node dist/index.js",
     "lint": "eslint src"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "convert-seconds": "^1.0.1",
     "discord.js": "^11.2.1",
     "dotenv": "^4.0.0",
     "steem": "^0.6.7",

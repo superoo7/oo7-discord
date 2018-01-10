@@ -13,4 +13,9 @@ let getDateTimeFromTimestamp = unixTimeStamp => {
   );
 };
 
-export { getDateTimeFromTimestamp };
+let timeConvertMessage = ({ hours: h, minutes: m, seconds: s }) =>
+  `${h !== 0 ? `${h} hours and ` : ''}${
+    m !== 0 ? `${m} minutes and ` : ''
+  }${s} seconds`;
+
+export { getDateTimeFromTimestamp, timeConvertMessage };

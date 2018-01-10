@@ -3,12 +3,13 @@ import * as logger from 'winston';
 import * as dotenv from 'dotenv';
 // import * as steem from 'steem';
 import * as http from 'http';
+import convert from 'convert-seconds';
 
 import 'babel-polyfill';
 
 dotenv.config();
 
-import { getDateTimeFromTimestamp } from './util';
+import { getDateTimeFromTimestamp, timeConvertMessage } from './util';
 
 import config from './config.json';
 
@@ -30,11 +31,8 @@ client.on('message', msg => {
 
     if (currentUserId === config.botId) {
         logger.info('BOT MESSAGE:', currentContent);
-        // } else if (
-        //     currentContent.toLowerCase() === 'what is the meaning of life?' ||
-        //     currentContent.toLowerCase() === 'what is meaning of life?'
-        // ) {
-        //     msg.reply('42');
+    } else if (config.whitelistId.indexOf(currentUserId) !== -1) {
+        logger.info('ADMIN MESSAGE', currentContent);
     } else {
         let currentCreatedTime = getDateTimeFromTimestamp(
             currentCreatedTimestamp
@@ -46,54 +44,82 @@ client.on('message', msg => {
         logger.info(currentContent);
 
         msg.channel
-            .fetchMessages({ limit: 100 })
+            .fetchMessages() //{ limit: 10000 }
             .then(messages => {
                 console.log(`Received ${messages.size} messages`);
-                let {
-                    author: { username: lastUsername, id: lastUserId },
-                    content: lastContent,
-                    createdTimestamp: lastCreatedTimestamp,
-                    id: lastMessageId
-                } = messages.find(m => {
-                    let { author: { id: lastUserId }, id: lastMessageId } = m;
-                    if (lastMessageId === currentMessageId) {
-                        return false;
-                    }
-                    return currentUserId === lastUserId;
-                });
-                let lastCreatedTime = getDateTimeFromTimestamp(
-                    lastCreatedTimestamp
-                );
-                let timeDiff = Math.floor(
-                    (Date.now() - lastCreatedTimestamp) / 1000
-                );
-                if (timeDiff > config.timeAllowed) {
-                    msg.reply(
-                        `POST APPROVED\n${lastUsername} on ${lastCreatedTime} says that\n "${lastContent}" ${timeDiff} seconds ago`
+                try {
+                    let {
+                        author: { username: lastUsername, id: lastUserId },
+                        content: lastContent,
+                        createdTimestamp: lastCreatedTimestamp,
+                        id: lastMessageId
+                    } = messages.find(m => {
+                        let {
+                            author: { id: lastUserId },
+                            id: lastMessageId
+                        } = m;
+
+                        if (lastMessageId === currentMessageId) {
+                            return false;
+                        }
+                        return currentUserId === lastUserId;
+                    });
+                    let lastCreatedTime = getDateTimeFromTimestamp(
+                        lastCreatedTimestamp
                     );
-                } else {
-                    msg
-                        .delete()
-                        .then(msg => {
-                            msg.reply(`Deleted message from ${msg.author}`);
-                            msg.reply(
-                                `YOU POSTED TOO FREQUENT. YOUR LAST POST IS JUST ${timeDiff} seconds ago, \nPlease wait for ${config.timeAllowed -
-                                    timeDiff} seconds\nYou can only post a link in ${
-                                    config.timeAllowed
-                                } seconds \nPS: Your post is deleted`
-                            );
-                        })
-                        .catch(console.error);
+                    let timeDiff = Math.floor(
+                        (Date.now() - lastCreatedTimestamp) / 1000
+                    );
+
+                    if (
+                        !!currentContent.match(
+                            /(http|https):\/\/(www\.steemit\.com\/|steemit\.com\/|busy\.org\/|www\.busy\.org\/)/g
+                        )
+                    ) {
+                        if (timeDiff > config.timeAllowed) {
+                            msg.reply(`POST APPROVED 👍`);
+                        } else {
+                            msg
+                                .delete()
+                                .then(msg => {
+                                    msg.reply(
+                                        `\nDeleted message from ${
+                                            msg.author
+                                        }\nbecause you have posted just posted **${timeConvertMessage(
+                                            convert(timeDiff)
+                                        )} ago**, \nPlease wait for **${timeConvertMessage(
+                                            convert(
+                                                config.timeAllowed - timeDiff
+                                            )
+                                        )}** for the new post\nYou can only post a link in ${
+                                            convert(config.timeAllowed).hours
+                                        } hours \nPS: Your post is deleted and please don't do it again 😠`
+                                    );
+                                })
+                                .catch(console.error);
+                        }
+                    } else {
+                        msg.delete();
+                        msg.reply(
+                            `Your post does not contain steemit.com link or busy.org link`
+                        );
+                    }
+                } catch (e) {
+                    msg.reply(
+                        `\nWelcome @${currentUsername}, seems like this is the first time you posted here. Remember you can only post a link in ${
+                            convert(config.timeAllowed).hours
+                        } hours`
+                    );
+                    return;
                 }
             })
             .catch(console.error);
     }
 });
-client.login(process.env.DISCORD_TOKEN);
-//
+client.login(process.env.DISCORD_TOKEN); // Start server
 http
     .createServer(function(request, response) {
-        response.writeHead(200, { 'Content-Type': contentType });
-        response.end(content, 'utf-8');
+        response.writeHead(200, { 'Content-Type': 'text/html' });
+        response.end('superoo7 bot still alive', 'utf-8');
     })
     .listen(process.env.PORT || 5000);
