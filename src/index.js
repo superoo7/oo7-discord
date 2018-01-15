@@ -14,11 +14,17 @@ import db from './db';
 db();
 
 // Controller
-import { checkRegisteredUser } from './controller/user';
+import {
+    checkRegisteredUser,
+    checkLastPost,
+    updateTime
+} from './controller/user';
 
 import { getDateTimeFromTimestamp, timeConvertMessage } from './util';
 
 import config from './config.json';
+
+let timeDiff;
 
 // start client
 const client = new Discord.Client();
@@ -52,11 +58,14 @@ client.on('message', msg => {
 
         let result = new Promise((resolve, reject) => {
             // Check Registered User
-            return checkRegisteredUser(currentUserId)
-                .then(isRegistered => {
-                    isRegistered ? resolve('') : reject('NOT_REGISTERED');
-                })
-                .catch(err => reject(err));
+            checkRegisteredUser(currentUserId).then(isRegistered => {
+                console.log(isRegistered);
+                if (isRegistered) {
+                    resolve('');
+                } else {
+                    reject('NOT_REGISTERED');
+                }
+            });
         })
             .then(() => {
                 // Check Post Validity with Regex (/(http|https):\/\/(www\.steemit\.com\/|steemit\.com\/|busy\.org\/|www\.busy\.org\/)/g)
@@ -71,6 +80,35 @@ client.on('message', msg => {
             })
             .then(() => {
                 // Check Last Post Time
+                return checkLastPost(currentUserId)
+                    .then(data => {
+                        if (!!data) {
+                            timeDiff = Math.floor(
+                                (currentCreatedTimestamp - data) / 1000
+                            );
+                            console.log(timeDiff);
+                            // CHECK TIME
+                            if (timeDiff > config.timeAllowed) {
+                                // Proceed
+                            } else {
+                                throw 'NOT_YET_TIME';
+                                return;
+                            }
+                        } else {
+                            // First Time
+                            msg.reply(
+                                `seems like it is the first time you post here.`
+                            );
+                        }
+                        // UPDATE TIME QUERY
+                        return updateTime(
+                            currentUserId,
+                            currentCreatedTimestamp
+                        );
+                    })
+                    .catch(err => {
+                        throw err;
+                    });
             })
             .then(() => {
                 msg.reply('POST APPROVED 👍');
@@ -85,6 +123,13 @@ client.on('message', msg => {
                     case 'NOT_VALID_LINK':
                         msg.reply(
                             'You did not include link to steemit.com or busy.org'
+                        );
+                        break;
+                    case 'NOT_YET_TIME':
+                        msg.reply(
+                            `Please wait for ${timeConvertMessage(
+                                convert(config.timeAllowed - timeDiff)
+                            )}`
                         );
                         break;
                     default:
