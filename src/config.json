@@ -1,4 +1,5 @@
 {
+  "mongoUrl": "mongodb://localhost:27017/stephard-prod",
   "trigger": ".",
   "botId": "399088553629450240",
   "timeAllowed": "64800",
