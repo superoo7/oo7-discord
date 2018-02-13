@@ -19,8 +19,20 @@ import {
     checkLastPost,
     updateTime
 } from './controller/user';
+import {
+    checkPostAge,
+    weightageForPost,
+    beautifyDate
+} from './controller/upvote/check';
+import {
+    aboutPost,
+    upvote
+} from './controller/upvote/index';
 
-import { getDateTimeFromTimestamp, timeConvertMessage } from './util';
+import {
+    getDateTimeFromTimestamp,
+    timeConvertMessage
+} from './util';
 
 import config from './config.json';
 
@@ -37,14 +49,19 @@ client.on('message', msg => {
     // GET INFO FOR MESSAGE
     let {
         id: currentMessageId,
-        author: { username: currentUsername, id: currentUserId },
+        author: {
+            username: currentUsername,
+            id: currentUserId
+        },
         content: currentContent,
         createdTimestamp: currentCreatedTimestamp
     } = msg;
 
     if (currentUserId === config.botId) {
         logger.info('BOT MESSAGE:', currentContent);
-    } else if (config.whitelistId.indexOf(currentUserId) !== -1) {
+    } else if (
+        config.whitelistId.indexOf(currentUserId) !== -1
+    ) {
         logger.info('ADMIN MESSAGE', currentContent);
     } else {
         let currentCreatedTime = getDateTimeFromTimestamp(
@@ -58,14 +75,16 @@ client.on('message', msg => {
 
         let result = new Promise((resolve, reject) => {
             // Check Registered User
-            checkRegisteredUser(currentUserId).then(isRegistered => {
-                console.log(isRegistered);
-                if (isRegistered) {
-                    resolve('');
-                } else {
-                    reject('NOT_REGISTERED');
+            checkRegisteredUser(currentUserId).then(
+                isRegistered => {
+                    console.log(isRegistered);
+                    if (isRegistered) {
+                        resolve('');
+                    } else {
+                        reject('NOT_REGISTERED');
+                    }
                 }
-            });
+            );
         })
             .then(() => {
                 // Check Post Validity with Regex (/(http|https):\/\/(www\.steemit\.com\/|steemit\.com\/|busy\.org\/|www\.busy\.org\/)/g)
@@ -84,11 +103,16 @@ client.on('message', msg => {
                     .then(data => {
                         if (!!data) {
                             timeDiff = Math.floor(
-                                (currentCreatedTimestamp - data) / 1000
+                                (currentCreatedTimestamp -
+                                    data) /
+                                    1000
                             );
                             console.log(timeDiff);
                             // CHECK TIME
-                            if (timeDiff > config.timeAllowed) {
+                            if (
+                                timeDiff >
+                                config.timeAllowed
+                            ) {
                                 // Proceed
                             } else {
                                 throw 'NOT_YET_TIME';
@@ -100,35 +124,126 @@ client.on('message', msg => {
                                 `seems like it is the first time you post here.`
                             );
                         }
-                        // UPDATE TIME QUERY
-                        return updateTime(
-                            currentUserId,
-                            currentCreatedTimestamp
+
+                        // Quality Check
+                        let link = currentContent.match(
+                            /(https?:\/\/[^\s]+)/g
                         );
+
+                        if (link.length === 1) {
+                            let authorName = link[0].split(
+                                /[\/#]/
+                            )[4];
+                            let permlinkName = link[0].split(
+                                /[\/#]/
+                            )[5];
+                            if (
+                                authorName.charAt(0) ===
+                                    '@' &&
+                                !!permlinkName
+                            ) {
+                                return aboutPost(
+                                    authorName.substr(1),
+                                    permlinkName
+                                )
+                                    .then(data => {
+                                        const {
+                                            author,
+                                            created,
+                                            isCheetah,
+                                            articleLength
+                                        } = data;
+                                        console.log(
+                                            '===================='
+                                        );
+                                        console.log(data);
+                                        if (isCheetah) {
+                                            throw 'CHEETAH';
+                                        } else if (
+                                            checkPostAge(
+                                                created
+                                            )
+                                        ) {
+                                            throw 'OLD_POST';
+                                        } else {
+                                            let createdTime = beautifyDate(
+                                                created
+                                            );
+                                            let weightage = weightageForPost(
+                                                articleLength
+                                            );
+                                            return {
+                                                author: authorName,
+                                                permlink: permlinkName,
+                                                weightage,
+                                                message: `The post is ${createdTime} and will be upvoted by ${weightage /
+                                                    100}%`
+                                            };
+                                        }
+                                    })
+                                    .catch(error => {
+                                        throw error;
+                                    });
+                            } else {
+                                throw 'NOT_VALID_LINK';
+                            }
+                        } else {
+                            throw 'NOT_VALID_LINK';
+                        }
                     })
                     .catch(err => {
                         throw err;
                     });
             })
-            .then(() => {
-                msg.reply('POST APPROVED 👍');
+            .then(data => {
+                const {
+                    author,
+                    permlink,
+                    weightage,
+                    message
+                } = data;
+                // UPDATE TIME QUERY
+                upvote(
+                    author.substr(1),
+                    permlink,
+                    weightage
+                );
+                updateTime(
+                    currentUserId,
+                    currentCreatedTimestamp
+                );
+                msg.reply(message);
             })
             .catch(err => {
                 console.log(err);
                 msg.delete();
                 switch (err) {
+                    case 'UPVOTED':
+                        msg.reply('Already upvoted');
+                    case 'CHEETAH':
+                        msg.reply(
+                            'Your post is voted by @cheetah'
+                        );
+                        break;
+                    case 'OLD_POST':
+                        msg.reply('Your post is too old.');
                     case 'NOT_REGISTERED':
-                        msg.reply('You are not yet registered');
+                        msg.reply(
+                            'You are not yet registered'
+                        );
                         break;
                     case 'NOT_VALID_LINK':
                         msg.reply(
-                            'You did not include link to steemit.com or busy.org'
+                            'You did not include link to steemit.com or busy.org or your link is not valid'
                         );
                         break;
                     case 'NOT_YET_TIME':
                         msg.reply(
                             `Please wait for ${timeConvertMessage(
-                                convert(config.timeAllowed - timeDiff)
+                                convert(
+                                    config.timeAllowed -
+                                        timeDiff
+                                )
                             )}`
                         );
                         break;
@@ -214,7 +329,9 @@ client.on('message', msg => {
 client.login(process.env.DISCORD_TOKEN); // Start server
 http
     .createServer(function(request, response) {
-        response.writeHead(200, { 'Content-Type': 'text/html' });
+        response.writeHead(200, {
+            'Content-Type': 'text/html'
+        });
         response.end('superoo7 bot still alive', 'utf-8');
     })
     .listen(process.env.PORT || 5000);
