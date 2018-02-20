@@ -156,6 +156,12 @@ client.on('message', msg => {
                                         postConfig
                                     )
                                         .then(postData => {
+                                            console.log(
+                                                '--------------------'
+                                            );
+                                            console.log(
+                                                postData
+                                            );
                                             if (
                                                 postData.msg ===
                                                     'CHEETAH' ||
@@ -165,10 +171,12 @@ client.on('message', msg => {
                                                     'POST_NOT_FOUND'
                                             ) {
                                                 throw postData.msg;
+                                            } else if (
+                                                postData.weightage ===
+                                                1000
+                                            ) {
+                                                throw 'NOT_ENOUGH_LENGTH';
                                             }
-                                            console.log(
-                                                postData
-                                            );
                                             return postData;
                                         })
                                         .catch(err => {
@@ -258,6 +266,11 @@ client.on('message', msg => {
                             msg.reply(
                                 "Can't upvote, it could be upvoted already"
                             );
+                            break;
+                        case 'NOT_ENOUGH_LENGTH':
+                            msg.reply(`
+This bot cultivate a quality over quantity post to showcase #TeamMalaysia are creative, authentic, and is not abusing and raping the blockchain.
+`);
                             break;
                         default:
                             msg.reply('ERROR');
