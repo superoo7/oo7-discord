@@ -216,7 +216,7 @@ client.on('message', msg => {
                                         throw 'NO_UPVOTE';
                                     } else {
                                         msg.reply(
-                                            postData.msg
+                                            `you may have a 🍪 coming to you soon!`
                                         );
                                         Promise.resolve();
                                     }
