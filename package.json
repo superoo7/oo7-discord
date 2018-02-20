@@ -1,10 +1,12 @@
 {
   "scripts": {
-    "dev": "NODE_ENV=development nodemon -w src --exec \"babel-node src --presets env\"",
+    "dev":
+      "NODE_ENV=development nodemon -w src --exec \"babel-node src --presets env\"",
     "build": "babel src -s -D -d dist --presets env",
     "start": "node dist/index.js",
     "lint": "eslint src",
-    "prettier": "prettier --write --single-quote --print-width=120 --tab-width=2 \"src/**/*.{js,jsx}\""
+    "prettier":
+      "prettier --write --single-quote --print-width=120 --tab-width=2 \"src/**/*.{js,jsx}\""
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
@@ -40,8 +42,8 @@
   "engines": {
     "node": "8.9.2"
   },
-  "name": "statBot",
-  "version": "1.0.0",
+  "name": "stephard",
+  "version": "3.0.0",
   "main": "index.js",
   "license": "MIT"
 }
