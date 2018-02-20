@@ -100,6 +100,17 @@ client.on('message', msg => {
                     }
                 })
                 .then(() => {
+                    if (
+                        currentContent.split(' ').length <
+                            50 ||
+                        currentContent.split(' ').length >
+                            255
+                    ) {
+                        throw 'NO_SYPNOPSIS';
+                    }
+                    return;
+                })
+                .then(() => {
                     // Check Last Post Time
                     return checkLastPost(currentUserId)
                         .then(data => {
@@ -256,7 +267,7 @@ client.on('message', msg => {
                             break;
                         case 'OLD_POST':
                             msg.reply(
-                                'Your post is too new / old to be shared'
+                                'Your post is too new / old to be shared (Please only share post that are > 30 minutes old and < 3.5 days old)'
                             );
                             break;
                         case 'POST_NOT_FOUND':
@@ -268,9 +279,14 @@ client.on('message', msg => {
                             );
                             break;
                         case 'NOT_ENOUGH_LENGTH':
-                            msg.reply(`
-This bot cultivate a quality over quantity post to showcase #TeamMalaysia are creative, authentic, and is not abusing and raping the blockchain.
-`);
+                            msg.reply(
+                                `Post is too short for us to reward you a 🍪 . Trying writing more."`
+                            );
+                            break;
+                        case 'NO_SYPNOPSIS':
+                            msg.reply(
+                                `Even movies have short synopsis. Try again. (50 - 250 words)`
+                            );
                             break;
                         default:
                             msg.reply('ERROR');
