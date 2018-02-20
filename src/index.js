@@ -215,8 +215,11 @@ client.on('message', msg => {
                                     ) {
                                         throw 'NO_UPVOTE';
                                     } else {
+                                        console.log(
+                                            postData.msg
+                                        );
                                         msg.reply(
-                                            `you may have a 🍪 coming to you soon!`
+                                            'you may have a 🍪 coming to you soon!'
                                         );
                                         Promise.resolve();
                                     }
