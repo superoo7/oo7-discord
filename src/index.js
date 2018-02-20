@@ -31,8 +31,8 @@ import config from './config.json';
 const postConfig = {
     maximumPostAge: 302400000, // 3.5 days
     minimumPostAge: 1800000, // 30 minutes
-    minimumLength: 100, // 250 characters
-    optimumLength: 4000 // 4000 characters
+    minimumLength: 120, // 120 words
+    optimumLength: 4000 // 4000 words
 };
 
 let timeDiff;
@@ -102,9 +102,9 @@ client.on('message', msg => {
                 .then(() => {
                     if (
                         currentContent.split(' ').length <
-                            50 ||
+                            10 ||
                         currentContent.split(' ').length >
-                            255
+                            100
                     ) {
                         throw 'NO_SYPNOPSIS';
                     }
@@ -288,7 +288,7 @@ client.on('message', msg => {
                             break;
                         case 'NO_SYPNOPSIS':
                             msg.reply(
-                                `Even movies have short synopsis. Try again. (50 - 250 words)`
+                                `Even movies have short synopsis. Try again. (10 - 50 words)`
                             );
                             break;
                         default:
