@@ -100,11 +100,18 @@ client.on('message', msg => {
                     }
                 })
                 .then(() => {
+                    console.log(
+                        currentContent.match(
+                            /[\u00ff-\uffff]|\S+/g
+                        ).length
+                    );
                     if (
-                        currentContent.split(' ').length <
-                            10 ||
-                        currentContent.split(' ').length >
-                            100
+                        currentContent.match(
+                            /[\u00ff-\uffff]|\S+/g
+                        ).length < 10 ||
+                        currentContent.match(
+                            /[\u00ff-\uffff]|\S+/g
+                        ).length > 100
                     ) {
                         throw 'NO_SYPNOPSIS';
                     }
