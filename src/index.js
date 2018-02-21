@@ -32,7 +32,9 @@ const postConfig = {
     maximumPostAge: 302400000, // 3.5 days
     minimumPostAge: 1800000, // 30 minutes
     minimumLength: 120, // 120 words
-    optimumLength: 4000 // 4000 words
+    optimumLength: 4000, // 4000 words
+    unwantedTags: ['steepshot', 'dmania', 'decentmeme'],
+    requiredTags: ['teammalaysia']
 };
 
 let timeDiff;
@@ -186,7 +188,11 @@ client.on('message', msg => {
                                                 postData.msg ===
                                                     'OLD_POST' ||
                                                 postData.msg ==
-                                                    'POST_NOT_FOUND'
+                                                    'POST_NOT_FOUND' ||
+                                                postData.msg ==
+                                                    'UNWANTED_TAGS' ||
+                                                postData.msg ==
+                                                    'REQUIRED_TAGS'
                                             ) {
                                                 throw postData.msg;
                                             } else if (
@@ -226,7 +232,9 @@ client.on('message', msg => {
                                             postData.msg
                                         );
                                         msg.reply(
-                                            'you may have a 🍪 coming to you soon!'
+                                            `post created ${
+                                                postData.time
+                                            }, you may have a 🍪 coming to you soon!`
                                         );
                                         Promise.resolve();
                                     }
@@ -296,6 +304,22 @@ client.on('message', msg => {
                         case 'NO_SYPNOPSIS':
                             msg.reply(
                                 `Even movies have short synopsis. Try again. (10 - 50 words)`
+                            );
+                            break;
+                        case 'REQUIRED_TAGS':
+                            let t1 = postConfig.requiredTags.join(
+                                ', '
+                            );
+                            msg.reply(
+                                `To use this bot, you required to use the following tags: ${t1}`
+                            );
+                            break;
+                        case 'UNWANTED_TAGS':
+                            let t2 = postConfig.unwantedTags.join(
+                                ', '
+                            );
+                            msg.reply(
+                                `This bot does not support following tags: ${t2}`
                             );
                             break;
                         default:
