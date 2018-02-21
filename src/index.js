@@ -33,7 +33,12 @@ const postConfig = {
     minimumPostAge: 1800000, // 30 minutes
     minimumLength: 120, // 120 words
     optimumLength: 4000, // 4000 words
-    unwantedTags: ['steepshot', 'dmania', 'decentmeme'],
+    unwantedTags: [
+        'steepshot',
+        'dmania',
+        'decentmeme',
+        'nsfw'
+    ],
     requiredTags: ['teammalaysia']
 };
 
@@ -110,10 +115,7 @@ client.on('message', msg => {
                     if (
                         currentContent.match(
                             /[\u00ff-\uffff]|\S+/g
-                        ).length < 10 ||
-                        currentContent.match(
-                            /[\u00ff-\uffff]|\S+/g
-                        ).length > 100
+                        ).length < 10
                     ) {
                         throw 'NO_SYPNOPSIS';
                     }
@@ -303,7 +305,7 @@ client.on('message', msg => {
                             break;
                         case 'NO_SYPNOPSIS':
                             msg.reply(
-                                `Even movies have short synopsis. Try again. (10 - 50 words)`
+                                `Please first write short description before posting URL. (10-50 words). 简解就好，不需长篇大论。`
                             );
                             break;
                         case 'REQUIRED_TAGS':
