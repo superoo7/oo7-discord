@@ -2782,7 +2782,7 @@ steem-upvote-util@1.3.1:
     winston "^2.4.0"
     wordcount "^1.1.1"
 
-steem@^0.6.2, steem@^0.6.7:
+steem@^0.6.2:
   version "0.6.7"
   resolved "https://registry.yarnpkg.com/steem/-/steem-0.6.7.tgz#98e070f5df55b5c214ace061a9d22027fc6a05aa"
   dependencies:

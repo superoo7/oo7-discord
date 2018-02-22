@@ -1,7 +1,7 @@
 import * as Discord from 'discord.js';
 import * as logger from 'winston';
 import * as dotenv from 'dotenv';
-// import * as steem from 'steem';
+import * as steem from 'steem';
 import * as http from 'http';
 import { main, upvote } from 'steem-upvote-util';
 import convert from 'convert-seconds';
@@ -238,8 +238,18 @@ client.on('message', msg => {
                                                 postData.time
                                             }, you may have a 🍪 coming to you soon!`
                                         );
-                                        Promise.resolve();
+                                        return;
                                     }
+                                })
+                                .then(() => {
+                                    console.log(
+                                        `--------------------------------------------------------------------------------`
+                                    );
+                                    console.log(postData);
+                                    testingPost(
+                                        postData.author,
+                                        postData.permlink
+                                    );
                                 })
                                 .catch(err => {
                                     throw err;
@@ -341,3 +351,21 @@ http
         response.end('superoo7 bot still alive', 'utf-8');
     })
     .listen(process.env.PORT || 5000);
+function testingPost(author, permlink) {
+    steem.broadcast.comment(
+        process.env.STEEM_POSTING, // posting wif
+        author, // author, leave blank for new post
+        permlink, // first tag or permlink
+        process.env.STEEM_USERNAME, // username
+        permlink, // permlink
+        '', // Title
+        `um... please don't mind me, I am just testing this out. I am not spamming, really. I'll be on my way now. oh yes... I just upvoted you by the way. Stephard Tester, superoo7/superoo7-dev`, // Body of post
+        {
+            tags: ['teammalaysiadevtest', 'teammalaysia'],
+            app: 'stephard/0.1'
+        }, // json metadata (additional tags, app name, etc)
+        function(err, result) {
+            console.log(err, result);
+        }
+    );
+}
