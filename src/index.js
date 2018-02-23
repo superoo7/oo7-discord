@@ -352,14 +352,20 @@ http
     })
     .listen(process.env.PORT || 5000);
 function testingPost(author, permlink) {
+    let randomMsg = Math.floor(
+        Math.random() * config.msgList.length
+    );
+    console.log(randomMsg);
+    let postMessage = config.msgList[randomMsg];
+    console.log(postMessage);
     steem.broadcast.comment(
         process.env.STEEM_POSTING, // posting wif
         author, // author, leave blank for new post
         permlink, // first tag or permlink
         process.env.STEEM_USERNAME, // username
         permlink, // permlink
-        '', // Title
-        `um... please don't mind me, I am just testing this out. I am not spamming, really. I'll be on my way now. oh yes... I just upvoted you by the way. Stephard Tester, superoo7/superoo7-dev`, // Body of post
+        '', // Title,
+        postMessage,
         {
             tags: ['teammalaysiadevtest', 'teammalaysia'],
             app: 'stephard/0.1'
