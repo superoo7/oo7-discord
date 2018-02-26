@@ -1,12 +1,19 @@
 {
-  "mongoUrl": "mongodb://localhost:27017/teammalaysia-prod",
+  "mongoUrl": "mongodb://localhost:27017/stephard-prod",
   "trigger": ".",
-  "botId": "402361844133658624",
-  "channelId": "403185791955763220",
-  "timeAllowed": "64800",
+  "botId": "412589545272508416",
+  "channelId": "412590279179108352",
+  "timeAllowed": "30",
   "whitelistId": [],
   "adminUser": {
     "superoo7": "206360732818735104",
     "littlenewthings": "330221961684713474"
-  }
+  },
+  "msgList": [
+    "#### You’ve been upvoted by **TeamMalaysia** Community :- \nTo support the growth of TeamMalaysia Follow our upvotes by using **steemauto.com** and follow trail of @myach\n\nVote **TeamMalaysia** witness bitrocker2020 using this link <a href=\"https://v2.steemconnect.com/sign/account-witness-vote?witness=bitrocker2020&approve=true\">vote for witness</a>\n",
+    "#### This post has been curated by **TeamMalaysia** Community :- \nTo support the growth of TeamMalaysia Follow our upvotes by using **steemauto.com** and follow trail of @myach\n\nVote **TeamMalaysia** witness bitrocker2020 using this link <a href=\"https://v2.steemconnect.com/sign/account-witness-vote?witness=bitrocker2020&approve=true\">vote for witness</a>\n",
+    "#### Thank you for sharing your posts with us. This post was curated by **TeamMalaysia** as part of our community support. Looking forward for more posts from you. \nTo support the growth of TeamMalaysia Follow our upvotes by using **steemauto.com** and follow trail of @myach\n\nVote **TeamMalaysia** witness bitrocker2020 using this link <a href=\"https://v2.steemconnect.com/sign/account-witness-vote?witness=bitrocker2020&approve=true\">vote bitrocker2020 witness</a>\n",
+    "#### You’ve been upvoted by **TeamMalaysia** community. Do checkout other posts made by other **TeamMalaysia** authors at http://steemit.com/created/teammalaysia\nTo support the growth of TeamMalaysia Follow our upvotes by using **steemauto.com** and follow trail of @myach\n\nVote **TeamMalaysia** witness bitrocker2020 using this link <a href=\"https://v2.steemconnect.com/sign/account-witness-vote?witness=bitrocker2020&approve=true\">vote for witness</a>\n",
+    "#### You’ve been upvoted by **TeamMalaysia** community. Here are trending posts by other **TeamMalaysia** authors at http://steemit.com/trending/teammalaysia\nTo support the growth of TeamMalaysia Follow our upvotes by using **steemauto.com** and follow trail of @myach\n\nVote **TeamMalaysia** witness bitrocker2020 using this link <a href=\"https://v2.steemconnect.com/sign/account-witness-vote?witness=bitrocker2020&approve=true\">vote for witness</a>\n"
+  ]
 }

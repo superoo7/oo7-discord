@@ -359,10 +359,10 @@ function testingPost(author, permlink) {
     let postMessage = config.msgList[randomMsg];
     console.log(postMessage);
     steem.broadcast.comment(
-        process.env.STEEM_POSTING, // posting wif
+        process.env.TEAMMALAYSIA_POSTING, // posting wif
         author, // author, leave blank for new post
         permlink, // first tag or permlink
-        process.env.STEEM_USERNAME, // username
+        process.env.TEAMMALAYSIA, // username
         permlink, // permlink
         '', // Title,
         postMessage,
