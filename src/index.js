@@ -73,6 +73,7 @@ client.on('message', msg => {
         if (currentUserId === config.botId) {
             logger.info('BOT MESSAGE:', currentContent);
         } else if (!!moderator.maintenance) {
+            msg.delete();
             msg.reply('The bot is under maintenance');
             return;
         } else {
