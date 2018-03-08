@@ -3,6 +3,7 @@ import * as logger from 'winston';
 import * as dotenv from 'dotenv';
 import * as steem from 'steem';
 import * as http from 'http';
+import * as fs from 'fs';
 import { main, upvote } from 'steem-upvote-util';
 import convert from 'convert-seconds';
 
