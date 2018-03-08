@@ -26,6 +26,8 @@ import {
     timeConvertMessage
 } from './util';
 
+// json
+import moderator from '../../moderator.json';
 import config from './config.json';
 
 const postConfig = {
@@ -55,6 +57,8 @@ client.on('message', msg => {
     if (msg.channel.id !== config.channelId) {
         return;
     } else {
+        // If the bot is at maintenance
+
         // GET INFO FOR MESSAGE
         let {
             id: currentMessageId,
@@ -68,10 +72,9 @@ client.on('message', msg => {
 
         if (currentUserId === config.botId) {
             logger.info('BOT MESSAGE:', currentContent);
-        } else if (
-            config.whitelistId.indexOf(currentUserId) !== -1
-        ) {
-            logger.info('ADMIN MESSAGE', currentContent);
+        } else if (!!moderator.maintenance) {
+            msg.reply('The bot is under maintenance');
+            return;
         } else {
             let currentCreatedTime = getDateTimeFromTimestamp(
                 currentCreatedTimestamp
