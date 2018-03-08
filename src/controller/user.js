@@ -2,27 +2,33 @@ import mongoose from 'mongoose';
 import User from '../model/user';
 
 let checkRegisteredUser = discordId => {
-  return User.findOne({ discordid: discordId }, (err, user) => {
-    if (err || !!user) {
-      return false;
-    }
+  return User.findOne(
+    { discordid: discordId },
+    (err, user) => {
+      if (err || !!user) {
+        return false;
+      }
 
-    return true;
-  })
+      return true;
+    }
+  )
     .then(data => (!!data ? true : false))
     .catch(err => false);
 };
 
 let checkLastPost = discordId => {
-  return User.findOne({ discordid: discordId }, (err, user) => {
-    if (err || !user) {
-      console.log('error');
+  return User.findOne(
+    { discordid: discordId },
+    (err, user) => {
+      if (err || !user) {
+        console.log('error');
+      }
+      return;
     }
-    return;
-  })
+  )
     .then(data => {
       if (!!data) {
-        return data.lastpostdatetime;
+        return data.lastpostdatetime[0];
       } else {
         throw 'ERROR';
         return;
@@ -35,30 +41,33 @@ let checkLastPost = discordId => {
 };
 
 const updateTime = (discordId, time) => {
-  return User.findOne({ discordid: discordId }, (err, user) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    console.log('success');
-    user.lastpostdatetime = time;
-    let result = user
-      .save(err => {
-        if (err) {
-          console.log(err);
+  return User.findOne(
+    { discordid: discordId },
+    (err, user) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log('success');
+      user.lastpostdatetime = [time];
+      let result = user
+        .save(err => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          console.log('success');
           return;
-        }
-        console.log('success');
-        return;
-      })
-      .then(data => {
-        return;
-      })
-      .catch(err => {
-        return;
-      });
-    return result;
-  }).catch(err => 'Error');
+        })
+        .then(data => {
+          return;
+        })
+        .catch(err => {
+          return;
+        });
+      return result;
+    }
+  ).catch(err => 'Error');
 };
 
 export { checkRegisteredUser, checkLastPost, updateTime };

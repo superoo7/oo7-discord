@@ -27,7 +27,6 @@ import {
 } from './util';
 
 // json
-import moderator from '../../moderator.json';
 import config from './config.json';
 
 const postConfig = {
@@ -72,7 +71,9 @@ client.on('message', msg => {
 
         if (currentUserId === config.botId) {
             logger.info('BOT MESSAGE:', currentContent);
-        } else if (!!moderator.maintenance) {
+        } else if (
+            !!require('/root/moderator.json').maintenance
+        ) {
             msg.delete();
             msg.reply('The bot is under maintenance');
             return;
