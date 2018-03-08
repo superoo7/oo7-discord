@@ -72,7 +72,12 @@ client.on('message', msg => {
         if (currentUserId === config.botId) {
             logger.info('BOT MESSAGE:', currentContent);
         } else if (
-            !!require('/root/moderator.json').maintenance
+            !!JSON.parse(
+                fs.readFileSync(
+                    '/root/moderator.json',
+                    'utf8'
+                )
+            ).maintenance
         ) {
             msg.delete();
             msg.reply('The bot is under maintenance');
