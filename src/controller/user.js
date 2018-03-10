@@ -9,7 +9,7 @@ let checkRegisteredUser = discordId => {
         return false;
       }
 
-      return true;
+      return user;
     }
   )
     .then(data => (!!data ? data.roles : false))
