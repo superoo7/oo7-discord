@@ -19,7 +19,8 @@ db();
 import {
     checkRegisteredUser,
     checkLastPost,
-    updateTime
+    updateUserTime,
+    updateSponsorTime
 } from './controller/user';
 
 import {
@@ -70,6 +71,8 @@ client.on('message', msg => {
             createdTimestamp: currentCreatedTimestamp
         } = msg;
 
+        let role;
+
         if (currentUserId === config.botId) {
             logger.info('BOT MESSAGE:', currentContent);
         } else if (
@@ -97,8 +100,9 @@ client.on('message', msg => {
                 // Check Registered User
                 checkRegisteredUser(currentUserId).then(
                     isRegistered => {
+                        role = isRegistered;
                         console.log(isRegistered);
-                        if (isRegistered) {
+                        if (!!isRegistered) {
                             resolve('');
                         } else {
                             reject('NOT_REGISTERED');
@@ -267,11 +271,19 @@ client.on('message', msg => {
                                 });
                         })
                         .then(() => {
-                            // UPDATE TIME QUERY
-                            return updateTime(
-                                currentUserId,
-                                currentCreatedTimestamp
-                            );
+                            if (role === 'user') {
+                                // UPDATE TIME QUERY FOR USER
+                                return updateUserTime(
+                                    currentUserId,
+                                    currentCreatedTimestamp
+                                );
+                            } else {
+                                // UPDATE TIME QUERY FOR SPONSOR
+                                return updateSponsorTime(
+                                    currentUserId,
+                                    currentCreatedTimestamp
+                                );
+                            }
                         })
                         .catch(err => {
                             throw err;

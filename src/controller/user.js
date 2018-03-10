@@ -12,7 +12,7 @@ let checkRegisteredUser = discordId => {
       return true;
     }
   )
-    .then(data => (!!data ? true : false))
+    .then(data => (!!data ? data.roles : false))
     .catch(err => false);
 };
 
@@ -40,7 +40,7 @@ let checkLastPost = discordId => {
     });
 };
 
-const updateTime = (discordId, time) => {
+const updateUserTime = (discordId, time) => {
   return User.findOne(
     { discordid: discordId },
     (err, user) => {
@@ -49,6 +49,7 @@ const updateTime = (discordId, time) => {
         return;
       }
       console.log('success');
+
       user.lastpostdatetime = [time];
       let result = user
         .save(err => {
@@ -70,4 +71,53 @@ const updateTime = (discordId, time) => {
   ).catch(err => 'Error');
 };
 
-export { checkRegisteredUser, checkLastPost, updateTime };
+const updateSponsorTime = (discordId, time) => {
+  return User.findOne(
+    { discordid: discordId },
+    (err, user) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log('success');
+
+      if (user.lastpostdatetime.length === 0) {
+        user.lastpostdatetime = [0, time];
+      } else if (user.lastpostdatetime.length === 1) {
+        user.lastpostdatetime = [
+          user.lastpostdatetime[0],
+          time
+        ];
+      } else {
+        user.lastpostdatetime = [
+          user.lastpostdatetime[1],
+          time
+        ];
+      }
+
+      let result = user
+        .save(err => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          console.log('success');
+          return;
+        })
+        .then(data => {
+          return;
+        })
+        .catch(err => {
+          return;
+        });
+      return result;
+    }
+  ).catch(err => 'Error');
+};
+
+export {
+  checkRegisteredUser,
+  checkLastPost,
+  updateUserTime,
+  updateSponsorTime
+};
