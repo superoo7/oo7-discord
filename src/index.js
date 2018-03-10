@@ -100,7 +100,14 @@ client.on('message', msg => {
                 // Check Registered User
                 checkRegisteredUser(currentUserId).then(
                     isRegistered => {
+                        console.log();
                         if (!!isRegistered) {
+                            console.log(
+                                '------------------------------------------------------------'
+                            );
+                            console.log(isRegistered);
+                            console.log(isRegistered.roles);
+                            console.log(isRegistered.name);
                             role = isRegistered.roles;
                             if (role === 'ban') {
                                 reject('BAN');
