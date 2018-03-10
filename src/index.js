@@ -100,14 +100,16 @@ client.on('message', msg => {
                 // Check Registered User
                 checkRegisteredUser(currentUserId).then(
                     isRegistered => {
-                        role = isRegistered;
-                        if (role === 'ban') {
-                            reject('BAN');
-                        }
-                        console.log('=================');
-                        console.log(isRegistered);
-                        console.log('=================');
                         if (!!isRegistered) {
+                            role = isRegistered;
+                            console.log(
+                                `========================================
+                                ${role}
+                                ========================================`
+                            );
+                            if (role === 'ban') {
+                                reject('BAN');
+                            }
                             resolve('');
                         } else {
                             reject('NOT_REGISTERED');
