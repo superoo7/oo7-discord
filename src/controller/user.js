@@ -8,7 +8,7 @@ let checkRegisteredUser = discordId => {
       if (err || !!user) {
         return false;
       }
-      console.log(user);
+      console.log(`checkRegisteredUser${user}`);
       return user.roles;
     }
   )

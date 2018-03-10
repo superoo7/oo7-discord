@@ -102,14 +102,6 @@ client.on('message', msg => {
                     isRegistered => {
                         if (!!isRegistered) {
                             role = isRegistered;
-                            console.log(
-                                `========================================
-                                ${role}
-                                ========================================`
-                            );
-                            if (role === 'ban') {
-                                reject('BAN');
-                            }
                             resolve('');
                         } else {
                             reject('NOT_REGISTERED');
@@ -165,12 +157,12 @@ client.on('message', msg => {
                                     return;
                                 }
                             } else {
+                                console.log(`👤${role}`);
                                 // First Time
                                 msg.reply(
                                     `seems like it is the first time you post here.`
                                 );
                             }
-
                             // Quality Check
                             // ============================================================
                             // Parse link (asd https://steemit.com/ asd => https://steemit.com)
@@ -404,7 +396,8 @@ function testingPost(author, permlink) {
         {
             tags: ['teammalaysiadevtest', 'teammalaysia'],
             app: 'stephard/0.1'
-        }, // json metadata (additional tags, app name, etc)
+        },
+        // json metadata (additional tags, app name, etc)
         function(err, result) {
             console.log(err, result);
         }
