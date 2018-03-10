@@ -104,7 +104,9 @@ client.on('message', msg => {
                         if (role === 'ban') {
                             reject('BAN');
                         }
+                        console.log('=================');
                         console.log(isRegistered);
+                        console.log('=================');
                         if (!!isRegistered) {
                             resolve('');
                         } else {
