@@ -13,7 +13,7 @@
     "dotenv": "^4.0.0",
     "mongoose": "^4.13.9",
     "steem": "^0.7.1",
-    "steem-upvote-util": "1.3.1",
+    "steem-upvote-util": "1.3.2",
     "winston": "^2.4.0"
   },
   "devDependencies": {

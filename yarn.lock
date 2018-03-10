@@ -2769,9 +2769,9 @@ steem-bot@^0.7.0:
   dependencies:
     steem "^0.6.2"
 
-steem-upvote-util@1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/steem-upvote-util/-/steem-upvote-util-1.3.1.tgz#3abda98213353e4d9acff022fc8edd2708348d8c"
+steem-upvote-util@1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/steem-upvote-util/-/steem-upvote-util-1.3.2.tgz#811528fdc45ab9bcee66622860080b06d0233a8b"
   dependencies:
     axios "^0.17.1"
     babel-polyfill "^6.26.0"

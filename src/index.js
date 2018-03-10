@@ -209,8 +209,8 @@ client.on('message', msg => {
                                             ) {
                                                 throw postData.msg;
                                             } else if (
-                                                postData.weightage ===
-                                                1000
+                                                postData.weightage <=
+                                                1500
                                             ) {
                                                 throw 'NOT_ENOUGH_LENGTH';
                                             }
