@@ -101,8 +101,12 @@ client.on('message', msg => {
                 checkRegisteredUser(currentUserId).then(
                     isRegistered => {
                         if (!!isRegistered) {
-                            role = isRegistered;
-                            resolve('');
+                            role = isRegistered.roles;
+                            if (role === 'ban') {
+                                reject('BAN');
+                            } else {
+                                resolve('');
+                            }
                         } else {
                             reject('NOT_REGISTERED');
                         }
@@ -157,7 +161,6 @@ client.on('message', msg => {
                                     return;
                                 }
                             } else {
-                                console.log(`👤${role}`);
                                 // First Time
                                 msg.reply(
                                     `seems like it is the first time you post here.`
