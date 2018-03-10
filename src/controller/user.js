@@ -8,11 +8,11 @@ let checkRegisteredUser = discordId => {
       if (err || !!user) {
         return false;
       }
-
-      return user;
+      console.log(user);
+      return user.roles;
     }
   )
-    .then(data => (!!data ? data.roles : false))
+    .then(data => (!!data ? data : false))
     .catch(err => false);
 };
 
