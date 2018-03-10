@@ -101,6 +101,9 @@ client.on('message', msg => {
                 checkRegisteredUser(currentUserId).then(
                     isRegistered => {
                         role = isRegistered;
+                        if (role === 'ban') {
+                            reject('BAN');
+                        }
                         console.log(isRegistered);
                         if (!!isRegistered) {
                             resolve('');
@@ -293,6 +296,11 @@ client.on('message', msg => {
                     console.log(err);
                     msg.delete();
                     switch (err) {
+                        case 'BAN':
+                            msg.reply(
+                                `You are ban, please contact moderator of #teammalaysia`
+                            );
+                            break;
                         case 'NOT_REGISTERED':
                             msg.reply(
                                 'You are not yet registered'
