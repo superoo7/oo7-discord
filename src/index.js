@@ -40,7 +40,9 @@ const postConfig = {
         'steepshot',
         'dmania',
         'decentmeme',
-        'nsfw'
+        'nsfw',
+        'cryptocurrency',
+        'bitcoin'
     ],
     requiredTags: ['teammalaysia']
 };
