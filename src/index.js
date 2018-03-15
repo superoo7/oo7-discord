@@ -241,7 +241,7 @@ client.on('message', msg => {
                                                         config.pendingId
                                                     )
                                                     .send(
-                                                        currentContent
+                                                        `FROM ${currentUsername} <@${currentUserId}>\n${currentContent}`
                                                     );
 
                                                 if (
@@ -252,13 +252,37 @@ client.on('message', msg => {
                                                     updateUserTime(
                                                         currentUserId,
                                                         currentCreatedTimestamp
-                                                    );
+                                                    )
+                                                        .then(
+                                                            data =>
+                                                                console.log(
+                                                                    data
+                                                                )
+                                                        )
+                                                        .catch(
+                                                            err =>
+                                                                console.log(
+                                                                    err
+                                                                )
+                                                        );
                                                 } else {
                                                     // UPDATE TIME QUERY FOR SPONSOR
                                                     updateSponsorTime(
                                                         currentUserId,
                                                         currentCreatedTimestamp
-                                                    );
+                                                    )
+                                                        .then(
+                                                            data =>
+                                                                console.log(
+                                                                    data
+                                                                )
+                                                        )
+                                                        .catch(
+                                                            err =>
+                                                                console.log(
+                                                                    err
+                                                                )
+                                                        );
                                                 }
                                                 throw 'EXIT';
                                             } else if (
@@ -343,6 +367,7 @@ client.on('message', msg => {
                     msg.delete();
                     switch (err) {
                         case 'EXIT':
+                            console.log('EXIT');
                             return;
                         case 'BAN':
                             msg.reply(
