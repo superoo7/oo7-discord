@@ -1,10 +1,12 @@
 {
   "scripts": {
-    "dev": "NODE_ENV=development nodemon -w src --exec \"babel-node src --presets env\"",
+    "dev":
+      "NODE_ENV=development nodemon -w src --exec \"babel-node src --presets env\"",
     "build": "babel src -s -D -d dist --presets env",
     "start": "node dist/index.js",
     "lint": "eslint src",
-    "prettier": "prettier --write --single-quote --print-width=120 --tab-width=2 \"src/**/*.{js,jsx}\""
+    "prettier":
+      "prettier --write --single-quote --print-width=120 --tab-width=2 \"src/**/*.{js,jsx}\""
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
@@ -13,7 +15,7 @@
     "dotenv": "^4.0.0",
     "mongoose": "^4.13.9",
     "steem": "^0.7.1",
-    "steem-upvote-util": "1.3.5",
+    "steem-upvote-util": "1.3.7",
     "winston": "^2.4.0"
   },
   "devDependencies": {

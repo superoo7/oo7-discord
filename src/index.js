@@ -44,7 +44,12 @@ const postConfig = {
         'cryptocurrency',
         'bitcoin'
     ],
-    requiredTags: ['teammalaysia']
+    requiredTags: ['teammalaysia'],
+    consideredTags: [
+        'bitcoin',
+        'cryptocurrency',
+        'nowplaying'
+    ]
 };
 
 let timeDiff;
@@ -215,14 +220,47 @@ client.on('message', msg => {
                                                     'CHEETAH' ||
                                                 postData.msg ===
                                                     'OLD_POST' ||
-                                                postData.msg ==
+                                                postData.msg ===
                                                     'POST_NOT_FOUND' ||
-                                                postData.msg ==
+                                                postData.msg ===
                                                     'UNWANTED_TAGS' ||
-                                                postData.msg ==
+                                                postData.msg ===
                                                     'REQUIRED_TAGS'
                                             ) {
                                                 throw postData.msg;
+                                            } else if (
+                                                postData.msg ===
+                                                'CONSIDERED_TAGS'
+                                            ) {
+                                                msg.delete();
+                                                msg.reply(
+                                                    `Your post has been forwarded to #pending-for-approval, please wait for moderator to review`
+                                                );
+                                                client.channels
+                                                    .get(
+                                                        config.pendingId
+                                                    )
+                                                    .send(
+                                                        currentContent
+                                                    );
+
+                                                if (
+                                                    role ===
+                                                    'user'
+                                                ) {
+                                                    // UPDATE TIME QUERY FOR USER
+                                                    updateUserTime(
+                                                        currentUserId,
+                                                        currentCreatedTimestamp
+                                                    );
+                                                } else {
+                                                    // UPDATE TIME QUERY FOR SPONSOR
+                                                    updateSponsorTime(
+                                                        currentUserId,
+                                                        currentCreatedTimestamp
+                                                    );
+                                                }
+                                                throw 'EXIT';
                                             } else if (
                                                 postData.weightage <=
                                                 1000
@@ -304,6 +342,8 @@ client.on('message', msg => {
                     console.log(err);
                     msg.delete();
                     switch (err) {
+                        case 'EXIT':
+                            return;
                         case 'BAN':
                             msg.reply(
                                 `You are ban, please contact moderator of #teammalaysia`
