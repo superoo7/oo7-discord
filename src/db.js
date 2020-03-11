@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import config from './config.json';
+import mongoose from "mongoose";
+import config from "./config.json";
 
 export default () => {
   mongoose.Promise = global.Promise;

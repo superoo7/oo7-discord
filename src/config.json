@@ -1,8 +1,8 @@
 {
-  "mongoUrl": "mongodb://localhost:27017/stephard-prod",
+  "mongoUrl": "mongodb://localhost:27017/qurator-prod",
   "trigger": ".",
-  "botId": "399088553629450240",
-  "timeAllowed": "30",
+  "botId": "405384371965526016",
+  "timeAllowed": "72000",
   "whitelistId": [],
   "adminUser": {
     "superoo7": "206360732818735104",

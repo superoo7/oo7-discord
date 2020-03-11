@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import User from '../model/user';
+import mongoose from "mongoose";
+import User from "../model/user";
 
 let checkRegisteredUser = discordId => {
   return User.findOne({ discordid: discordId }, (err, user) => {
@@ -16,7 +16,7 @@ let checkRegisteredUser = discordId => {
 let checkLastPost = discordId => {
   return User.findOne({ discordid: discordId }, (err, user) => {
     if (err || !user) {
-      console.log('error');
+      console.log("error");
     }
     return;
   })
@@ -24,7 +24,7 @@ let checkLastPost = discordId => {
       if (!!data) {
         return data.lastpostdatetime;
       } else {
-        throw 'ERROR';
+        throw "ERROR";
         return;
       }
     })
@@ -40,7 +40,7 @@ const updateTime = (discordId, time) => {
       console.log(err);
       return;
     }
-    console.log('success');
+    console.log("success");
     user.lastpostdatetime = time;
     let result = user
       .save(err => {
@@ -48,7 +48,7 @@ const updateTime = (discordId, time) => {
           console.log(err);
           return;
         }
-        console.log('success');
+        console.log("success");
         return;
       })
       .then(data => {
@@ -58,7 +58,7 @@ const updateTime = (discordId, time) => {
         return;
       });
     return result;
-  }).catch(err => 'Error');
+  }).catch(err => "Error");
 };
 
 export { checkRegisteredUser, checkLastPost, updateTime };
